@@ -124,3 +124,10 @@ body {
 #scrollToTop:hover {
     opacity: 1;
 }
+
+.auth-logo {
+    width: 4rem;
+    height: 4rem;
+    /*display: block;*/
+    margin: 0 auto;
+}

@@ -106,12 +106,4 @@ public class NoteController {
         User currentUser = getCurrentUser(authentication);
         return noteService.togglePinStatus(id, currentUser);
     }
-
-    // 用户个人资料页面
-    @GetMapping("/profile")
-    public String profile(Model model, Authentication authentication) {
-        User currentUser = getCurrentUser(authentication);
-        model.addAttribute("user", currentUser);
-        return "profile";
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.notekeeper.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ public class User {
     private String role = "ROLE_USER";
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Note> notes = new ArrayList<>();
 
     @CreationTimestamp
@@ -47,4 +49,6 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    private String avatar; // 新增头像字段
 }

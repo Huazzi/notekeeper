@@ -6,8 +6,7 @@
     <title>注册 - NoteKeeper</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/css/style.css">
-
+    <link rel="stylesheet" href="/css/index.css">
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
@@ -23,8 +22,10 @@
         }
 
         .auth-logo {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            width: 4rem;
+            height: 4rem;
+            display: block;
+            margin: 0 auto;
         }
 
         .card {
@@ -45,7 +46,7 @@
 <body class="bg-light">
 <div class="container register-container">
     <div class="text-center mb-4">
-        <div class="auth-logo">📝</div>
+        <img src="/assets/favicon01.svg" alt="NoteKeeper Logo" class="auth-logo">
         <h1 class="display-5">NoteKeeper</h1>
         <p class="lead">在线便签系统</p>
     </div>
@@ -90,6 +91,14 @@
                         <input type="password" class="form-control" id="password" th:field="*{password}" required>
                     </div>
                     <small class="form-text text-muted">密码长度至少6位，包含字母和数字</small>
+                    
+                    <!-- 在密码输入框下方添加 -->
+                    <div class="password-strength mt-2">
+                        <div class="progress" style="height: 5px;">
+                            <div id="passwordStrength" class="progress-bar" role="progressbar"></div>
+                        </div>
+                        <small id="passwordFeedback" class="form-text"></small>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-person-plus"></i> 注册
@@ -103,5 +112,60 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const password = document.getElementById('password');
+    
+    form.addEventListener('submit', function(e) {
+        if (!validatePassword(password.value)) {
+            e.preventDefault();
+            alert('密码必须至少6位，且包含字母和数字！');
+        }
+    });
+
+    function validatePassword(password) {
+        return password.length >= 6 && 
+               /[A-Za-z]/.test(password) && 
+               /[0-9]/.test(password);
+    }
+
+    document.getElementById('password').addEventListener('input', function() {
+        const password = this.value;
+        const strength = calculatePasswordStrength(password);
+        updatePasswordStrengthUI(strength);
+    });
+
+    function calculatePasswordStrength(password) {
+        let score = 0;
+        if (password.length >= 8) score += 25;
+        if (password.match(/[A-Z]/)) score += 25;
+        if (password.match(/[a-z]/)) score += 25;
+        if (password.match(/[0-9]/)) score += 25;
+        return score;
+    }
+
+    function updatePasswordStrengthUI(strength) {
+        const progressBar = document.getElementById('passwordStrength');
+        const feedback = document.getElementById('passwordFeedback');
+        
+        progressBar.style.width = strength + '%';
+        
+        if (strength <= 25) {
+            progressBar.className = 'progress-bar bg-danger';
+            feedback.textContent = '弱密码';
+        } else if (strength <= 50) {
+            progressBar.className = 'progress-bar bg-warning';
+            feedback.textContent = '一般';
+        } else if (strength <= 75) {
+            progressBar.className = 'progress-bar bg-info';
+            feedback.textContent = '强';
+        } else {
+            progressBar.className = 'progress-bar bg-success';
+            feedback.textContent = '非常强';
+        }
+    }
+});
+</script>
 </body>
 </html>
