@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.getElementById('searchBtn');
     const editNoteForm = document.getElementById('editNoteForm');
     const saveEditBtn = document.getElementById('saveEditBtn');
+    const addNoteModal = new bootstrap.Modal(document.getElementById('addNoteModal'));
 
     // 添加回到顶部按钮
     const scrollToTopBtn = document.createElement('div');
@@ -54,11 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
         })
             .then(response => response.json())
             .then(note => {
-                // 添加成功后重新加载便签列表
+                // 添加成功后关闭模态框
+                addNoteModal.hide();
+                // 重新加载便签列表
                 loadNotes();
                 // 重置表单
                 noteForm.reset();
-                document.getElementById('color').value = '#ffffff';
+                document.getElementById('color').value = '#fff8eb';
 
                 // 显示成功提示
                 showToast('便签已成功添加！', 'success');

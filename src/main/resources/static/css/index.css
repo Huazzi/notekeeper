@@ -34,6 +34,8 @@ body {
     border-top: 3px solid var(--color-primary);
     /* background-color: var(--color-background) !important; */
     animation: fadeIn 0.5s ease-out forwards;
+    margin-bottom: 20px;
+    border-radius: 12px;
 }
 
 .pinned-badge {
@@ -205,9 +207,20 @@ body {
 }
 
 /* 搜索框样式 */
+.input-group {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
 .input-group .form-control {
     background-color: var(--color-background);
     border-color: var(--color-primary-light);
+    border-radius: 20px 0 0 20px;
+    padding-left: 20px;
+}
+
+.input-group .btn {
+    border-radius: 0 20px 20px 0;
+    padding: 8px 20px;
 }
 
 /* 模态框样式 */
@@ -245,4 +258,35 @@ body {
 footer {
     background-color: var(--color-background-dark) !important;
     color: var(--color-primary);
+}
+
+/* 添加便签的浮动按钮样式 */
+.floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.floating-btn:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 20px;
 }
