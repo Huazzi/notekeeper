@@ -32,10 +32,10 @@ body {
 
 .note-card {
     border-top: 3px solid var(--color-primary);
-    /* background-color: var(--color-background) !important; */
     animation: fadeIn 0.5s ease-out forwards;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     border-radius: 12px;
+    max-height: 300px; /* 限制最大高度 */
 }
 
 .pinned-badge {
@@ -64,12 +64,13 @@ body {
 
 .note-actions button {
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
+    font-size: 0.9rem;
 }
 
 .note-actions .btn-outline-primary {
@@ -94,8 +95,14 @@ body {
 
 .note-content {
     white-space: pre-line;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     overflow-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* 限制显示4行 */
+    -webkit-box-orient: vertical;
+    font-size: 0.95rem; /* 稍微减小字体 */
+    line-height: 1.5;
 }
 
 /* 自定义动画效果 */
@@ -113,7 +120,21 @@ body {
 /* 响应式调整 */
 @media (max-width: 767.98px) {
     .note-card {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .floating-btn {
+        right: 70px;
+        bottom: 15px;
+    }
+    
+    #scrollToTop {
+        right: 15px;
+        bottom: 15px;
+    }
+    
+    .card-body {
+        padding: 12px;
     }
 }
 
@@ -264,9 +285,9 @@ footer {
 .floating-btn {
     position: fixed;
     bottom: 20px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
+    right: 80px; /* 向左移动，避免与回到顶部按钮重叠 */
+    width: 50px; /* 稍微减小按钮尺寸 */
+    height: 50px;
     border-radius: 50%;
     background-color: var(--color-primary);
     color: white;
@@ -288,5 +309,37 @@ footer {
 }
 
 .card-body {
-    padding: 20px;
+    padding: 15px; /* 减小内边距 */
+}
+
+/* 调整便签容器的内外边距 */
+#notesContainer {
+    padding: 0 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 调整标题大小 */
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* 调整搜索框宽度 */
+.row.justify-content-center .col-md-6 {
+    max-width: 600px;
+}
+
+/* 便签标题样式 */
+.notes-header {
+    max-width: 1200px;
+    padding: 0 2rem;
+}
+
+.notes-header h2 {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-primary-light);
 }
