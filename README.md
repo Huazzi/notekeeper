@@ -1,6 +1,19 @@
 # 📝 NoteKeeper
 
-📝 NoteKeeper - 在线便签
+📝 NoteKeeper - 在线便签 
+> 自己做的一个练手项目，结构功能比较简单，主要用于 Springboot+MySQL 后端的部署练习。
+
+### 预览
+1. 主界面
+![notekeeper-home](https://cdn.jsdelivr.net/gh/Huazzi/myImg@main/projects/notekeeper-home.png)
+2. 查看便签
+![notekeeper-papers](https://cdn.jsdelivr.net/gh/Huazzi/myImg@main/projects/notekeeper-papers.png)
+3. 个人资料
+![notekeeper-profile](https://cdn.jsdelivr.net/gh/Huazzi/myImg@main/projects/notekeeper-profile.png)
+4. 登录界面
+![notekeeper-login](https://cdn.jsdelivr.net/gh/Huazzi/myImg@main/projects/notekeeper-login.png)
+5. 注册界面
+![notekeeper-register](https://cdn.jsdelivr.net/gh/Huazzi/myImg@main/projects/notekeeper-register.png)
 
 ### 主要项目结构
 

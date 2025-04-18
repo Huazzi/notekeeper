@@ -1,9 +1,19 @@
 /* 引入字体 */
 @import url("https://chinese-fonts-cdn.deno.dev/packages/lywkpmydb/dist/LXGWWenKaiMonoScreen/result.css");
 
+:root {
+    --color-primary: #6a8d6d;        /* 瓦松绿 */
+    --color-primary-dark: #557157;    /* 深瓦松绿 */
+    --color-primary-light: #89aa8c;   /* 浅瓦松绿 */
+    --color-background: #fffbf6;      /* 荔肉白 */
+    --color-background-dark: #fff8eb; /* 深荔肉白 */
+    --color-text: #2c3e50;           /* 主要文字颜色 */
+    --color-accent: #f0ad4e;
+}
+
 body {
-    font-family:'LXGW WenKai Mono Screen', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'LXGW WenKai Mono Screen', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-background);
 }
 
 .card {
@@ -11,6 +21,8 @@ body {
     border-radius: 8px;
     overflow: hidden;
     height: 100%;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-primary-light);
 }
 
 .card:hover {
@@ -19,15 +31,17 @@ body {
 }
 
 .note-card {
-    border-top: 5px solid #6c757d;
+    border-top: 3px solid var(--color-primary);
+    /* background-color: var(--color-background) !important; */
+    animation: fadeIn 0.5s ease-out forwards;
 }
 
 .pinned-badge {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #ffc107;
-    color: #212529;
+    background-color: var(--color-accent);
+    color: white;
     font-size: 0.8rem;
     padding: 0.25rem 0.5rem;
     border-radius: 10px;
@@ -56,6 +70,26 @@ body {
     padding: 0;
 }
 
+.note-actions .btn-outline-primary {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.note-actions .btn-outline-primary:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+.note-actions .btn-outline-warning {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.note-actions .btn-outline-warning:hover {
+    background-color: var(--color-accent);
+    color: white;
+}
+
 .note-content {
     white-space: pre-line;
     margin-bottom: 15px;
@@ -72,10 +106,6 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.note-card {
-    animation: fadeIn 0.5s ease-out forwards;
 }
 
 /* 响应式调整 */
@@ -95,7 +125,7 @@ body {
 .empty-state i {
     font-size: 5rem;
     margin-bottom: 20px;
-    color: #dee2e6;
+    color: var(--color-primary-light);
 }
 
 /* 滚动到顶部按钮 */
@@ -106,7 +136,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #0c882b;
+    background-color: var(--color-primary);
     color: white;
     display: flex;
     align-items: center;
@@ -122,12 +152,97 @@ body {
 }
 
 #scrollToTop:hover {
+    background-color: var(--color-primary-dark);
     opacity: 1;
 }
 
 .auth-logo {
     width: 4rem;
     height: 4rem;
-    /*display: block;*/
     margin: 0 auto;
+}
+
+/* 修改导航栏样式 */
+.navbar {
+    background-color: var(--color-background-dark) !important;
+    border-bottom: 1px solid var(--color-primary-light);
+}
+
+.navbar-light .navbar-brand,
+.navbar-light .nav-link,
+.navbar-light .dropdown-toggle {
+    color: white !important;
+}
+
+.navbar-brand, .nav-link {
+    color: var(--color-primary) !important;
+}
+
+/* 修改按钮样式 */
+.btn-success {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-success:hover {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+
+/* 修改卡片样式 */
+.card-header.bg-success {
+    background-color: var(--color-primary) !important;
+}
+
+/* 输入框样式 */
+.form-control {
+    background-color: #fffcf9;
+}
+
+.form-control:focus {
+    background-color: #fffcf9;
+    box-shadow: 0 0 0 0.2rem rgba(106, 141, 109, 0.25);
+}
+
+/* 搜索框样式 */
+.input-group .form-control {
+    background-color: var(--color-background);
+    border-color: var(--color-primary-light);
+}
+
+/* 模态框样式 */
+.modal-content {
+    background-color: var(--color-background);
+}
+
+/* 修改下拉菜单样式 */
+.dropdown-menu {
+    background-color: var(--color-background);
+    border-color: var(--color-primary-light);
+}
+
+.dropdown-item {
+    color: var(--color-text);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.dropdown-item.text-danger:hover,
+.dropdown-item.text-danger:focus {
+    background-color: #ff8080;
+    color: white;
+}
+
+.dropdown-divider {
+    border-top-color: var(--color-primary-light);
+}
+
+/* 页脚样式 */
+footer {
+    background-color: var(--color-background-dark) !important;
+    color: var(--color-primary);
 }
