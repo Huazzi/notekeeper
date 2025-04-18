@@ -1,6 +1,6 @@
 # 📝 NoteKeeper
 
-📝 NoteKeeper - 标签管理
+📝 NoteKeeper - 在线便签
 
 ### 主要项目结构
 
