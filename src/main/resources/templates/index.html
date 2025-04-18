@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteKeeper - 在线便签</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="NoteKeeper" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+</head>
+<body>
+<div class="container mt-4">
+    <header class="mb-5 text-center">
+        <h1 class="display-4" style="font-weight: bold">📝 NoteKeeper</h1>
+        <p class="lead">轻松保存和管理你的便签</p>
+
+        <!-- 搜索框 -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="搜索便签...">
+                    <button id="searchBtn" class="btn btn-success">
+                        <i class="bi bi-search"></i> 搜索
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 添加新便签的表单 -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">创建新便签</h5>
+                </div>
+                <div class="card-body">
+                    <form id="noteForm">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">标题</label>
+                            <input type="text" class="form-control" id="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">内容</label>
+                            <textarea class="form-control" id="content" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="color" class="form-label">颜色</label>
+                            <input type="color" class="form-control form-control-color" id="color" value="#ffffff">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="isPinned">
+                            <label class="form-check-label" for="isPinned">置顶此便签</label>
+                        </div>
+                        <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> 添加便签</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 便签展示区域 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="border-bottom pb-2">我的便签</h2>
+        </div>
+    </div>
+
+    <div id="notesContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- 便签内容会通过JavaScript动态添加 -->
+    </div>
+
+    <!-- 编辑便签的模态框 -->
+    <div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editNoteModalLabel">编辑便签</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editNoteForm">
+                        <input type="hidden" id="editNoteId">
+                        <div class="mb-3">
+                            <label for="editTitle" class="form-label">标题</label>
+                            <input type="text" class="form-control" id="editTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editContent" class="form-label">内容</label>
+                            <textarea class="form-control" id="editContent" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editColor" class="form-label">颜色</label>
+                            <input type="color" class="form-control form-control-color" id="editColor">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="editIsPinned">
+                            <label class="form-check-label" for="editIsPinned">置顶此便签</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveEditBtn">保存更改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-light py-4 mt-5">
+    <div class="container text-center">
+        <p class="mb-0">© 2025 NoteKeeper 在线便签 | My First Deployed Java Application</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>
