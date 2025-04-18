@@ -74,16 +74,6 @@
             <scope>test</scope> <!-- 仅测试环境可用 -->
         </dependency>
 
-        <!-- 添加 Flyway 依赖 -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-mysql</artifactId>
-        </dependency>
-
         <!-- 添加Spring Security依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

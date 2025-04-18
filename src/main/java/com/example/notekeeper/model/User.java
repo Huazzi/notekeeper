@@ -34,7 +34,7 @@ public class User {
 
     private String fullName;
 
-    @Column(columnDefinition = "boolean default true")
+    @Column(columnDefinition = "boolean default true", name = "is_active")
     private Boolean active = true;
 
     @Column(columnDefinition = "varchar(255) default 'ROLE_USER'")
