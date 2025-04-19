@@ -4,15 +4,28 @@ import com.example.notekeeper.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -34,13 +47,33 @@ public class SecurityConfig {
                 return authenticationConfiguration.getAuthenticationManager();
         }
 
-        // 配置 SecurityFilterChain
+        // 配置API接口的安全过滤链
         @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        @Order(1)
+        public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .securityMatcher("/api/**")
+                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                                                .anyRequest().authenticated())
+                                .exceptionHandling(ex -> ex
+                                                .authenticationEntryPoint(
+                                                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                                .userDetailsService(userDetailsService);
+
+                return http.build();
+        }
+
+        // 配置Web页面的安全过滤链
+        @Bean
+        @Order(2)
+        public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/register", "/login", "/css/**", "/js/**",
-                                                                "/assets/**", "/uploads/**")
+                                                                "/assets/**", "/uploads/**", "/favicon.ico")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form
@@ -55,12 +88,25 @@ public class SecurityConfig {
                                                 .clearAuthentication(true)
                                                 .permitAll())
                                 .rememberMe(remember -> remember
-                                                .key("uniqueAndSecret") // 使用唯一的密钥
-                                                .tokenValiditySeconds(86400) // 24小时
-                                )
-                                .csrf(AbstractHttpConfigurer::disable) // 在生产环境中应启用 CSRF 保护
-                                .userDetailsService(userDetailsService); // 设置自定义 UserDetailsService
+                                                .key("uniqueAndSecret")
+                                                .tokenValiditySeconds(86400))
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .userDetailsService(userDetailsService);
 
                 return http.build();
+        }
+
+        // 配置CORS
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Vue开发服务器默认端口
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList("*"));
+                configuration.setAllowCredentials(true);
+
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                return source;
         }
 }
