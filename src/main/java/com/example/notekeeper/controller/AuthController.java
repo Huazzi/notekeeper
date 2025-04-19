@@ -3,6 +3,7 @@ package com.example.notekeeper.controller;
 import com.example.notekeeper.model.User;
 import com.example.notekeeper.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,9 @@ import java.util.UUID;
 
 @Controller
 public class AuthController {
+
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     @Autowired
     private UserService userService;
@@ -116,9 +120,8 @@ public class AuthController {
     }
 
     private String handleAvatarUpload(MultipartFile file) throws IOException {
-        // 获取项目根目录
-        String projectRoot = System.getProperty("user.dir");
-        String uploadDir = projectRoot + "/uploads/avatars/";
+        // 使用配置的上传目录
+        String avatarDir = uploadDir + "/avatars/";
 
         // 生成文件名
         String originalFilename = file.getOriginalFilename();
@@ -126,7 +129,7 @@ public class AuthController {
         String fileName = UUID.randomUUID().toString() + fileExtension;
 
         // 创建目录
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(avatarDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
