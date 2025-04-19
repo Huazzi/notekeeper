@@ -34,13 +34,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // 加载所有便签
     loadNotes();
 
+    // 初始化富文本编辑器
+    initTinyMCE();
+
+    // 监听模态框事件，确保编辑器正确初始化
+    document.getElementById('addNoteModal').addEventListener('shown.bs.modal', function() {
+        const editor = tinymce.get('content');
+        if (editor) {
+            editor.setContent('');
+        }
+    });
+
+    // 监听编辑便签模态框的隐藏事件，确保下次打开时不会显示旧内容
+    document.getElementById('editNoteModal').addEventListener('hidden.bs.modal', function() {
+        const editor = tinymce.get('editContent');
+        if (editor) {
+            editor.setContent('');
+        }
+    });
+
     // 提交表单添加新便签
     noteForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
         const newNote = {
             title: document.getElementById('title').value,
-            content: document.getElementById('content').value,
+            content: tinymce.get('content').getContent(), // 获取富文本内容
             color: document.getElementById('color').value,
             isPinned: document.getElementById('isPinned').checked
         };
@@ -104,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const updatedNote = {
             title: document.getElementById('editTitle').value,
-            content: document.getElementById('editContent').value,
+            content: tinymce.get('editContent').getContent(), // 获取富文本内容
             color: document.getElementById('editColor').value,
             isPinned: document.getElementById('editIsPinned').checked
         };
@@ -191,7 +210,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">${escapeHtml(note.title)}</h5>
                         <p class="note-time">更新于: ${formattedDate}</p>
-                        <p class="card-text note-content">${escapeHtml(note.content)}</p>
+                        <div class="card-text note-content" data-expanded="false">
+                            ${note.content}
+                            <div class="expand-indicator">
+                                <i class="bi bi-chevron-down"></i>
+                                <span>点击展开</span>
+                            </div>
+                        </div>
                         <div class="note-actions">
                             <button class="btn btn-sm btn-outline-primary edit-btn" data-id="${note.id}" title="编辑">
                                 <i class="bi bi-pencil"></i>
@@ -235,6 +260,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+
+        // 为便签内容添加点击展开/收起功能
+        document.querySelectorAll('.note-content').forEach(content => {
+            content.addEventListener('click', function(e) {
+                // 防止点击事件触发到按钮
+                if (e.target.closest('.note-actions')) return;
+                
+                const isExpanded = this.getAttribute('data-expanded') === 'true';
+                const expandIndicator = this.querySelector('.expand-indicator');
+                
+                if (isExpanded) {
+                    this.setAttribute('data-expanded', 'false');
+                    this.style.maxHeight = '150px'; // 恢复默认高度
+                    expandIndicator.innerHTML = '<i class="bi bi-chevron-down"></i><span>点击展开</span>';
+                } else {
+                    this.setAttribute('data-expanded', 'true');
+                    this.style.maxHeight = 'none';
+                    expandIndicator.innerHTML = '<i class="bi bi-chevron-up"></i><span>点击收起</span>';
+                }
+            });
+            
+            // 检查内容是否需要展开按钮
+            const checkOverflow = () => {
+                const isOverflowing = content.scrollHeight > content.clientHeight;
+                const expandIndicator = content.querySelector('.expand-indicator');
+                if (expandIndicator) {
+                    expandIndicator.style.display = isOverflowing ? 'flex' : 'none';
+                }
+            };
+            
+            // 在内容加载完成后检查
+            setTimeout(checkOverflow, 100);
+        });
     }
 
     // 打开编辑模态框
@@ -244,11 +302,25 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(note => {
                 document.getElementById('editNoteId').value = note.id;
                 document.getElementById('editTitle').value = note.title;
-                document.getElementById('editContent').value = note.content;
                 document.getElementById('editColor').value = note.color;
                 document.getElementById('editIsPinned').checked = note.isPinned;
 
-                // 显示模态框
+                // 确保编辑器已经初始化完成后再设置内容
+                const editor = tinymce.get('editContent');
+                if (editor) {
+                    editor.setContent(note.content);
+                } else {
+                    // 如果编辑器还未初始化，等待初始化完成后设置内容
+                    tinymce.init({
+                        selector: '#editContent',
+                        setup: function(editor) {
+                            editor.on('init', function() {
+                                editor.setContent(note.content);
+                            });
+                        }
+                    });
+                }
+
                 const editModal = new bootstrap.Modal(document.getElementById('editNoteModal'));
                 editModal.show();
             })
@@ -355,3 +427,43 @@ document.addEventListener('DOMContentLoaded', function() {
         return div.innerHTML;
     }
 });
+
+// 初始化富文本编辑器
+function initTinyMCE() {
+    tinymce.init({
+        selector: '.tinymce-editor',
+        height: 300,
+        menubar: false,
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'table', 'code', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+        content_style: `
+            body { 
+                font-family: 'LXGW WenKai Mono Screen', system-ui, -apple-system; 
+                font-size: 14px; 
+                line-height: 1.5; 
+                padding: 10px;
+                background-color: ${getComputedStyle(document.documentElement).getPropertyValue('--color-background')}
+            }
+        `,
+        language: 'zh_CN',
+        paste_data_images: true,
+        // 禁用自动保存功能，避免内容混淆
+        autosave_ask_before_unload: false,
+        autosave_interval: '0s',
+        autosave_restore_when_empty: false,
+        // 设置初始化回调
+        init_instance_callback: function(editor) {
+            editor.on('BeforeSetContent', function(e) {
+                // 清除可能存在的草稿内容
+                localStorage.removeItem('tinymce-autosave-' + editor.id);
+            });
+        }
+    });
+}

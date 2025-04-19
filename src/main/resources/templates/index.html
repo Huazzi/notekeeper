@@ -14,6 +14,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="NoteKeeper" />
     <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <!-- 富文本编辑 TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/9dt0c1w6azuu6pniad65dcnezwc4i75qxvp9wfrmup4t4pzh/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script>
+
 </head>
 <body>
 <!-- 资料挂管理 -->
@@ -99,7 +103,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="content" class="form-label">内容</label>
-                        <textarea class="form-control" id="content" rows="3"></textarea>
+                        <textarea class="tinymce-editor" id="content"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="color" class="form-label">颜色</label>
@@ -138,7 +142,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="editContent" class="form-label">内容</label>
-                        <textarea class="form-control" id="editContent" rows="3"></textarea>
+                        <textarea class="tinymce-editor" id="editContent"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="editColor" class="form-label">颜色</label>
@@ -158,9 +162,15 @@
     </div>
 </div>
 
-<footer class="bg-light py-4 mt-5">
-    <div class="container text-center">
-        <p class="mb-0">© 2025 NoteKeeper 在线便签 | My First Deployed Java Application</p>
+<!-- 调整原有的 footer 部分 -->
+<footer class="footer mt-auto py-3">
+    <div class="container">
+        <div class="footer-content">
+            <hr class="footer-divider">
+            <div class="text-center py-2">
+                <p class="mb-0">© 2025 NoteKeeper 在线便签 | My First Deployed Java Application</p>
+            </div>
+        </div>
     </div>
 </footer>
 
